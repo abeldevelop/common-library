@@ -11,7 +11,7 @@ public class BaseEntityWithAuditAndVersionTest {
 	
 	@Test
 	public void test_createdBaseEntityWithAuditAndVersionObject_ok() {
-		BaseEntityWithAuditAndVersion expected = new BaseEntityWithAuditAndVersion();
+		BaseEntityWithAudit expected = new BaseEntityWithAudit();
 		expected.setId(1L);
 		expected.setAuditCreatedDate(LocalDateTime.of(2020, 01, 22, 22, 22));
 		expected.setAuditCreatedUser("userCreated");
@@ -19,9 +19,8 @@ public class BaseEntityWithAuditAndVersionTest {
 		expected.setAuditModifiedUser("userModified");
 		expected.setAuditDeletedDate(LocalDateTime.of(2020, 01, 22, 22, 22));
 		expected.setAuditDeletedUser("userDeleted");
-		expected.setVersion(2);
 		
-		BaseEntityWithAuditAndVersion actual = BaseEntityWithAuditAndVersion.builder()
+		BaseEntityWithAudit actual = BaseEntityWithAudit.builder()
 			.id(1L)
 			.auditCreatedDate(LocalDateTime.of(2020, 01, 22, 22, 22))
 			.auditCreatedUser("userCreated")
@@ -29,7 +28,6 @@ public class BaseEntityWithAuditAndVersionTest {
 			.auditModifiedUser("userModified")
 			.auditDeletedDate(LocalDateTime.of(2020, 01, 22, 22, 22))
 			.auditDeletedUser("userDeleted")
-			.version(2)
 			.build();
 		
 		assertEquals(expected.getId(), actual.getId());
@@ -39,7 +37,6 @@ public class BaseEntityWithAuditAndVersionTest {
 		assertEquals(expected.getAuditModifiedUser(), actual.getAuditModifiedUser());
 		assertEquals(expected.getAuditDeletedDate(), actual.getAuditDeletedDate());
 		assertEquals(expected.getAuditDeletedUser(), actual.getAuditDeletedUser());
-		assertEquals(expected.getVersion(), actual.getVersion());
 		
 	}
 }
