@@ -31,6 +31,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource.ErrorResponseResourceBuilder;
 import com.abeldevelop.architecture.library.common.enums.Environments;
@@ -50,13 +51,13 @@ import lombok.extern.slf4j.Slf4j;
 public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private static final String ERROR_LOG_PREFIX = "ErrorResponseResource: {}";
-	private static final String REQUEST_FIELD_VALUE_NOT_VALID = "requestFieldValueNotValid"; // TODO Take the code from properties
 
 	private final Environment environment;
 	private final ErrorMessageService errorMessageService;
 	private final Tracer tracer;
 	private final StackTraceMapper stackTraceMapper;
-
+	private final ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
+	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -108,7 +109,7 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return handleResponseException(new BadRequestException(REQUEST_FIELD_VALUE_NOT_VALID, Arrays.asList(ex.getValue()), ex), status);
+		return handleResponseException(new BadRequestException(errorCodeArchitectureProperties.getRequestFieldValueNotValid(), Arrays.asList(ex.getValue()), ex), status);
 	}
 
 	@Override

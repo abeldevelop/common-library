@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
 import com.abeldevelop.architecture.library.common.domain.pagination.in.PaginationIn;
 import com.abeldevelop.architecture.library.common.domain.pagination.out.PaginationOut;
 import com.abeldevelop.architecture.library.common.dto.pagination.PaginationResponseResource;
@@ -16,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class PaginationMapper {
 
-	private static final String PAGINATION_MIN_SIZE_ERROR = "paginationMinSizeError";	//TODO => Take from errorCodeArchitectureProperties
-	private static final String PAGINATION_MIN_PAGE_ERROR = "paginationMinPageError";	//TODO => Take from errorCodeArchitectureProperties
-	
 	private static final Integer DEFAULT_PAGE_NUMBER = 0;
 	private static final Integer DEFAULT_PAGE_SIZE = 10;
 	private static final Integer MIN_PAGE = 1;
@@ -26,7 +24,7 @@ public class PaginationMapper {
 	private static final Integer ADD_NUMBER_TO_PAGE = 1;
 	private static final Integer SUBTRACT_NUMBER_TO_PAGE = 1;
 
-//	private final ErrorCodeArchitectureProperties errorCodeArchitectureProperties;	//TODO => Create the configuration properties ErrorCodeArchitectureProperties
+	private final ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
 
 	public PaginationIn map(Integer page, Integer size) {
 		return PaginationIn.builder().page(validatePageIn(page)).size(validateSizeIn(size)).build();
@@ -57,7 +55,7 @@ public class PaginationMapper {
 		if (page == null) {
 			return DEFAULT_PAGE_NUMBER;
 		} else if (page.intValue() < MIN_PAGE) {
-			throw new BadRequestException(PAGINATION_MIN_PAGE_ERROR, Arrays.asList(MIN_PAGE));
+			throw new BadRequestException(errorCodeArchitectureProperties.getPaginationMinPageError(), Arrays.asList(MIN_PAGE));
 		} else {
 			return page - SUBTRACT_NUMBER_TO_PAGE;
 		}
@@ -67,7 +65,7 @@ public class PaginationMapper {
 		if (size == null) {
 			return DEFAULT_PAGE_SIZE;
 		} else if (size.intValue() < MIN_PAGE_SIZE) {
-			throw new BadRequestException(PAGINATION_MIN_SIZE_ERROR, Arrays.asList(MIN_PAGE_SIZE));
+			throw new BadRequestException(errorCodeArchitectureProperties.getPaginationMinSizeError(), Arrays.asList(MIN_PAGE_SIZE));
 		} else {
 			return size;
 		}

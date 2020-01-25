@@ -42,6 +42,7 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource;
 import com.abeldevelop.architecture.library.common.exception.client.BadRequestException;
 import com.abeldevelop.architecture.library.common.mapper.exception.StackTraceMapper;
@@ -66,9 +67,12 @@ public class AbelDevelopExceptionHandlerTest {
 	@Mock
 	private StackTraceMapper stackTraceMapper;
 	
+	@Mock
+	private ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
+	
 	@BeforeEach
 	public void setUp() {
-		abelDevelopExceptionHandler = new AbelDevelopExceptionHandler(environment, errorMessageService, tracer, stackTraceMapper);
+		abelDevelopExceptionHandler = new AbelDevelopExceptionHandler(environment, errorMessageService, tracer, stackTraceMapper, errorCodeArchitectureProperties);
 	}
 
 	@Test
