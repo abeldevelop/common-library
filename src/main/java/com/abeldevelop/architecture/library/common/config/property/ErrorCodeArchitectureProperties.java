@@ -13,8 +13,22 @@ import lombok.Setter;
 public class ErrorCodeArchitectureProperties {
 
 	private String paginationMinPageError;
-    private String paginationMinSizeError;
+	private String paginationMinSizeError;
     
-    private String requestFieldValueNotValid;
+	private String requestFieldValueNotValid;
     
+	//Pagination
+	private String paginationResponseResourceNotNull;
+	private String paginationPageNotNull;
+	private String paginationSizeNotNull;
+	private String paginationNumberOfElementsNotNull;
+	private String paginationTotalPagesNotNull;
+	private String paginationTotalElementsNotNull;
+	private String paginationFirstNotNull;
+	private String paginationLastNotNull;
+
+	//Audit
+	private String auditResponseResourceNotNull;
+	private String auditCreatedDateNotNull;
+	private String auditCreatedUserNotNull;
 }
