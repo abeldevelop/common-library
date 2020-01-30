@@ -27,4 +27,26 @@ public class StringUtils {
 	public static String generateUrlName(String string) {
 		return normalize(string.toLowerCase().replace(" ", "-"));
 	}
+	
+	/**
+	 * Check if string have then length (minSize and maxSize included)
+	 * 
+	 * @param str String to check size
+	 * @param minSize min size of the string (included)
+	 * @param maxSize max size of the string (included)
+	 * @return <code>true</code> if the String size is between
+	 */
+	public static boolean isSizeBetween(String str, int minSize, int maxSize) {
+		return (str.length() >= minSize && str.length() <= maxSize);
+	}
+	
+	/**
+     * <p>Checks if a String is empty ("") or null.</p>
+     *
+     * @param str  the String to check, may be null
+     * @return <code>true</code> if the String is empty or null
+     */
+    public static boolean isEmpty(String str) {
+        return str == null || str.length() == 0;
+    }
 }
