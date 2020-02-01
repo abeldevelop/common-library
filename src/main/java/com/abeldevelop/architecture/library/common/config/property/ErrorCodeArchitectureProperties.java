@@ -11,14 +11,13 @@ import lombok.Setter;
 @Component
 @ConfigurationProperties("architecture-error-code")
 public class ErrorCodeArchitectureProperties {
-
-	private String paginationMinPageError;
-	private String paginationMinSizeError;
     
 	private String requestFieldValueNotValid;
     
 	//Pagination
 	private String paginationResponseResourceNotNull;
+	private String paginationMinPageError;
+	private String paginationMinSizeError;
 	private String paginationPageNotNull;
 	private String paginationSizeNotNull;
 	private String paginationNumberOfElementsNotNull;
