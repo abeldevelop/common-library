@@ -48,7 +48,9 @@ import com.abeldevelop.architecture.library.common.exception.client.BadRequestEx
 import com.abeldevelop.architecture.library.common.mapper.exception.StackTraceMapper;
 import com.abeldevelop.architecture.library.common.service.ErrorMessageService;
 
+import brave.Span;
 import brave.Tracer;
+import brave.propagation.TraceContext;
 
 @ExtendWith(MockitoExtension.class)
 public class AbelDevelopExceptionHandlerTest {
@@ -65,6 +67,9 @@ public class AbelDevelopExceptionHandlerTest {
 	private Tracer tracer;
 	
 	@Mock
+    private Span span;
+	
+	@Mock
 	private StackTraceMapper stackTraceMapper;
 	
 	@Mock
@@ -73,6 +78,7 @@ public class AbelDevelopExceptionHandlerTest {
 	@BeforeEach
 	public void setUp() {
 		abelDevelopExceptionHandler = new AbelDevelopExceptionHandler(environment, errorMessageService, tracer, stackTraceMapper, errorCodeArchitectureProperties);
+		Mockito.when(tracer.currentSpan()).thenReturn(null);
 	}
 
 	@Test
@@ -85,7 +91,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("defaultMessage")
 					.build(), 
 				new HttpHeaders(), 
@@ -105,7 +110,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -125,7 +129,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -145,7 +148,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -165,7 +167,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -185,7 +186,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -205,7 +205,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -223,7 +222,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(503)
 					.error("Service Unavailable")
-					.code("code")
 					.message("Service Unavailable")
 					.build(), 
 				new HttpHeaders(), 
@@ -241,7 +239,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(503)
 					.error("Service Unavailable")
-					.code("code")
 					.message("Service Unavailable")
 					.build(), 
 				new HttpHeaders(), 
@@ -261,7 +258,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -281,7 +277,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -301,7 +296,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -319,7 +313,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(503)
 					.error("Service Unavailable")
-					.code("code")
 					.message("Service Unavailable")
 					.build(), 
 				new HttpHeaders(), 
@@ -339,7 +332,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Bad Request")
 					.build(), 
 				new HttpHeaders(), 
@@ -358,7 +350,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(503)
 					.error("Service Unavailable")
-					.code("code")
 					.message("Service Unavailable")
 					.build(), 
 				new HttpHeaders(), 
@@ -380,7 +371,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Message")
 					.build(), 
 				new HttpHeaders(), 
@@ -402,7 +392,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.code("code")
 					.message("Message one")
 					.build(), 
 				new HttpHeaders(), 
@@ -423,7 +412,6 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(500)
 					.error("Internal Server Error")
-					.code("code")
 					.message("Internal Server Error")
 					.build(), 
 				new HttpHeaders(), 
