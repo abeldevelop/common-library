@@ -161,7 +161,7 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 		errorResponseResourceBuilder.timestamp(LocalDateTime.now());
 		errorResponseResourceBuilder.status(status.value());
 		errorResponseResourceBuilder.error(status.getReasonPhrase());
-		errorResponseResourceBuilder.code("code"); // TODO Take the spanId from tracer.currentSpan()
+		errorResponseResourceBuilder.code(tracer.currentSpan().context().traceIdString());
 		setMessageToResponseResourceBuilder(ex, errorResponseResourceBuilder, status);
 		addSensitiveInformation(ex, errorResponseResourceBuilder);
 		return errorResponseResourceBuilder.build();
