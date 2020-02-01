@@ -31,4 +31,7 @@ public class ErrorCodeArchitectureProperties {
 	private String auditResponseResourceNotNull;
 	private String auditCreatedDateNotNull;
 	private String auditCreatedUserNotNull;
+	
+	//Service
+	private String versionConflict;
 }
