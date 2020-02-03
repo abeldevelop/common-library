@@ -1,5 +1,6 @@
 package com.abeldevelop.architecture.library.common.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,9 @@ public class ErrorMessageServiceImpl implements ErrorMessageService {
 	@Value("${spring.application.name}")
 	private String serviceName;
 
+	@Value("${abeldevelop.used-libraries}")
+	private List<String> usedLibraries;
+	
 	@Override
 	public Optional<String> getMessage(String code) {
 		return callLabelsAndErrorsService(code);
@@ -31,7 +35,7 @@ public class ErrorMessageServiceImpl implements ErrorMessageService {
 		try {
 			String message = null;
 			// TODO => Get the languageCode from headers
-			ErrorMessageResponseResource errorMessageResponseResource = errorMessageClient.executeFindOne(serviceName, "es-ES", code);
+			ErrorMessageResponseResource errorMessageResponseResource = errorMessageClient.executeFindOne(usedLibraries, serviceName, "es-ES", code);
 			message = errorMessageResponseResource.getMessage();
 			return Optional.ofNullable(message);
 		} catch (Exception e) {
