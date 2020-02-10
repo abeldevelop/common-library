@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
 import com.abeldevelop.architecture.library.common.dto.pagination.PaginationResponseResource;
 import com.abeldevelop.architecture.library.common.exception.server.ValidationResponseException;
 
@@ -16,8 +15,7 @@ public class PaginationResponseResourceValidationTest {
 	
 	@BeforeEach
 	public void setUp() {
-		ErrorCodeArchitectureProperties errorCodeArchitectureProperties = new ErrorCodeArchitectureProperties();
-		paginationResponseResourceValidation = new PaginationResponseResourceValidation(errorCodeArchitectureProperties);
+		paginationResponseResourceValidation = new PaginationResponseResourceValidation();
 	}
 	
 	@Test

@@ -1,8 +1,6 @@
 package com.abeldevelop.architecture.library.common.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
+import com.abeldevelop.architecture.library.common.constant.ErrorCommonCodeMessageConstants;
 import com.abeldevelop.architecture.library.common.exception.client.ConflictException;
 import com.abeldevelop.architecture.library.common.model.BaseEntityWithAudit;
 import com.abeldevelop.architecture.library.common.util.AuditUtils;
@@ -14,12 +12,9 @@ import com.abeldevelop.architecture.library.common.util.AuditUtils;
  */
 public abstract class CommonService {
 
-	@Autowired
-	private ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
-	
 	public void checkNotExistConflict(Integer databaseVersion, Integer dtoVersion) {
 		if(databaseVersion == null || dtoVersion == null || databaseVersion.intValue() != dtoVersion.intValue()) {
-			throw new ConflictException(errorCodeArchitectureProperties.getVersionConflict());
+			throw new ConflictException(ErrorCommonCodeMessageConstants.VERSION_CONFLICT);
 		}
 	}
 	

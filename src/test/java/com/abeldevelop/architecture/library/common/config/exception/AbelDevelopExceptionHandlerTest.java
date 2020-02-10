@@ -8,7 +8,6 @@ import java.beans.PropertyEditor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -42,15 +41,13 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
+import com.abeldevelop.architecture.library.common.config.i18n.Translator;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource;
 import com.abeldevelop.architecture.library.common.exception.client.BadRequestException;
 import com.abeldevelop.architecture.library.common.mapper.exception.StackTraceMapper;
-import com.abeldevelop.architecture.library.common.service.ErrorMessageService;
 
 import brave.Span;
 import brave.Tracer;
-import brave.propagation.TraceContext;
 
 @ExtendWith(MockitoExtension.class)
 public class AbelDevelopExceptionHandlerTest {
@@ -61,7 +58,7 @@ public class AbelDevelopExceptionHandlerTest {
 	private Environment environment;
 	
 	@Mock
-	private ErrorMessageService errorMessageService;
+	private Translator translator;
 	
 	@Mock
 	private Tracer tracer;
@@ -72,12 +69,9 @@ public class AbelDevelopExceptionHandlerTest {
 	@Mock
 	private StackTraceMapper stackTraceMapper;
 	
-	@Mock
-	private ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
-	
 	@BeforeEach
 	public void setUp() {
-		abelDevelopExceptionHandler = new AbelDevelopExceptionHandler(environment, errorMessageService, tracer, stackTraceMapper, errorCodeArchitectureProperties);
+		abelDevelopExceptionHandler = new AbelDevelopExceptionHandler(environment, translator, tracer, stackTraceMapper);
 		Mockito.when(tracer.currentSpan()).thenReturn(null);
 	}
 
@@ -91,7 +85,7 @@ public class AbelDevelopExceptionHandlerTest {
 				ErrorResponseResource.builder()
 					.status(400)
 					.error("Bad Request")
-					.message("defaultMessage")
+					.message(null)
 					.build(), 
 				new HttpHeaders(), 
 				HttpStatus.BAD_REQUEST);
@@ -364,7 +358,7 @@ public class AbelDevelopExceptionHandlerTest {
 		
 		Mockito.when(environment.getActiveProfiles()).thenReturn(new String[] {"dev"});
 		Mockito.when(stackTraceMapper.map(Mockito.any())).thenReturn(Arrays.asList(""));
-		Mockito.when(errorMessageService.getMessage(Mockito.anyString())).thenReturn(Optional.of("Message"));
+		Mockito.when(translator.translate(Mockito.anyString())).thenReturn("Message");
 		
 		ResponseEntity<Object> actual = abelDevelopExceptionHandler.handleAllExceptions(new BadRequestException("message"), null);
 		ResponseEntity<Object> expected = new ResponseEntity<>(
@@ -385,7 +379,7 @@ public class AbelDevelopExceptionHandlerTest {
 		
 		Mockito.when(environment.getActiveProfiles()).thenReturn(new String[] {"dev"});
 		Mockito.when(stackTraceMapper.map(Mockito.any())).thenReturn(Arrays.asList(""));
-		Mockito.when(errorMessageService.getMessage(Mockito.anyString())).thenReturn(Optional.of("Message {}"));
+		Mockito.when(translator.translate(Mockito.anyString())).thenReturn("Message {}");
 		
 		ResponseEntity<Object> actual = abelDevelopExceptionHandler.handleAllExceptions(new BadRequestException("message", Arrays.asList("one")), null);
 		ResponseEntity<Object> expected = new ResponseEntity<>(

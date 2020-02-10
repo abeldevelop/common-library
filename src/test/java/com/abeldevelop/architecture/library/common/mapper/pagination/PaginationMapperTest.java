@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
 import com.abeldevelop.architecture.library.common.domain.pagination.in.PaginationIn;
 import com.abeldevelop.architecture.library.common.domain.pagination.out.PaginationOut;
 import com.abeldevelop.architecture.library.common.dto.pagination.PaginationResponseResource;
@@ -25,12 +23,9 @@ public class PaginationMapperTest {
 
 	private PaginationMapper paginationMapper;
 	
-	@Mock
-	private ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
-	
 	@BeforeEach
 	public void setUp() {
-		paginationMapper = new PaginationMapper(errorCodeArchitectureProperties);
+		paginationMapper = new PaginationMapper();
 	}
 	
 	@Test

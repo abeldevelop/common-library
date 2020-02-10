@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
+import com.abeldevelop.architecture.library.common.constant.ErrorPaginationCodeMessageConstants;
 import com.abeldevelop.architecture.library.common.domain.pagination.in.PaginationIn;
 import com.abeldevelop.architecture.library.common.domain.pagination.out.PaginationOut;
 import com.abeldevelop.architecture.library.common.dto.pagination.PaginationResponseResource;
@@ -23,8 +23,6 @@ public class PaginationMapper {
 	private static final Integer MIN_PAGE_SIZE = 1;
 	private static final Integer ADD_NUMBER_TO_PAGE = 1;
 	private static final Integer SUBTRACT_NUMBER_TO_PAGE = 1;
-
-	private final ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
 
 	public PaginationIn map(Integer page, Integer size) {
 		return PaginationIn.builder().page(validatePageIn(page)).size(validateSizeIn(size)).build();
@@ -55,7 +53,7 @@ public class PaginationMapper {
 		if (page == null) {
 			return DEFAULT_PAGE_NUMBER;
 		} else if (page.intValue() < MIN_PAGE) {
-			throw new BadRequestException(errorCodeArchitectureProperties.getPaginationMinPageError(), Arrays.asList(MIN_PAGE));
+			throw new BadRequestException(ErrorPaginationCodeMessageConstants.PAGINATION_MIN_PAGE_ERROR, Arrays.asList(MIN_PAGE));
 		} else {
 			return page - SUBTRACT_NUMBER_TO_PAGE;
 		}
@@ -65,7 +63,7 @@ public class PaginationMapper {
 		if (size == null) {
 			return DEFAULT_PAGE_SIZE;
 		} else if (size.intValue() < MIN_PAGE_SIZE) {
-			throw new BadRequestException(errorCodeArchitectureProperties.getPaginationMinSizeError(), Arrays.asList(MIN_PAGE_SIZE));
+			throw new BadRequestException(ErrorPaginationCodeMessageConstants.PAGINATION_MIN_SIZE_ERROR, Arrays.asList(MIN_PAGE_SIZE));
 		} else {
 			return size;
 		}

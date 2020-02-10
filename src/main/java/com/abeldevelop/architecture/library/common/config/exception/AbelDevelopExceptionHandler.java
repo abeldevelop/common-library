@@ -31,14 +31,13 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.abeldevelop.architecture.library.common.config.property.ErrorCodeArchitectureProperties;
+import com.abeldevelop.architecture.library.common.config.i18n.Translator;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource.ErrorResponseResourceBuilder;
 import com.abeldevelop.architecture.library.common.enums.Environments;
 import com.abeldevelop.architecture.library.common.exception.AbelDevelopException;
 import com.abeldevelop.architecture.library.common.exception.client.BadRequestException;
 import com.abeldevelop.architecture.library.common.mapper.exception.StackTraceMapper;
-import com.abeldevelop.architecture.library.common.service.ErrorMessageService;
 
 import brave.Tracer;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +52,9 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 	private static final String ERROR_LOG_PREFIX = "ErrorResponseResource: {}";
 
 	private final Environment environment;
-	private final ErrorMessageService errorMessageService;
+	private final Translator translator;
 	private final Tracer tracer;
 	private final StackTraceMapper stackTraceMapper;
-	private final ErrorCodeArchitectureProperties errorCodeArchitectureProperties;
 	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
@@ -109,7 +107,7 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return handleResponseException(new BadRequestException(errorCodeArchitectureProperties.getRequestFieldValueNotValid(), Arrays.asList(ex.getValue()), ex), status);
+		return handleResponseException(new BadRequestException("TODO", Arrays.asList(ex.getValue()), ex), status);
 	}
 
 	@Override
@@ -183,20 +181,20 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 
 	private String getMethodArgumentNotValidExceptionMessage(MethodArgumentNotValidException exception) {
 		FieldError fieldError = (FieldError) exception.getBindingResult().getAllErrors().get(0);
-		return getMessageFromProperties(fieldError.getDefaultMessage());
+		return getMessageFromTranslator(fieldError.getDefaultMessage());
 	}
 	
 	private String messageFormatter(String message, List<Object> arguments) {
 		return MessageFormatter.arrayFormat(message, arguments.toArray()).getMessage();
 	}
 	
-	private String getMessageFromProperties(String code) {
-		return errorMessageService.getMessage(code).orElse(code);
+	private String getMessageFromTranslator(String code) {
+		return translator.translate(code);
 	}
 	
 	private void setMessageToResponseResourceBuilder(Exception ex, ErrorResponseResourceBuilder errorResponseResourceBuilder, HttpStatus status) {
 	    if(ex instanceof AbelDevelopException) {
-            String message = getMessageFromProperties(ex.getMessage());
+            String message = getMessageFromTranslator(ex.getMessage());
             List<Object> arguments = ((AbelDevelopException) ex).getArguments();
             if(arguments != null && !arguments.isEmpty()) {
                 message = messageFormatter(message, arguments);
