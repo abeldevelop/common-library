@@ -2,24 +2,29 @@ package com.abeldevelop.architecture.library.common.config.i18n;
 
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
+import com.abeldevelop.architecture.library.common.constant.ErrorCommonCodeMessageConstants;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class Translator {
 
-	private ResourceBundleMessageSource messageSource;
-
-	@Autowired
-	public Translator(ResourceBundleMessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-
-	public String translate(String msgCode) {
+	private final CustomReloadableResourceBundleMessageSource customReloadableResourceBundleMessageSource;
+	
+	public String translate(String code) {
 		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage(msgCode, null, locale);
+		try {
+			return customReloadableResourceBundleMessageSource.getMessage(code, null, locale);
+		} catch (Exception e) {
+			log.error("Exception: {}", e);
+			return customReloadableResourceBundleMessageSource.getMessage(ErrorCommonCodeMessageConstants.I_18_N_MESSAGE_NOT_FOUND, null, locale);
+		}
 	}
 	
 }

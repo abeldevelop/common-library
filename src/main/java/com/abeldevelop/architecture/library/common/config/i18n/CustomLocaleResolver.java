@@ -32,4 +32,12 @@ public class CustomLocaleResolver extends AcceptHeaderLocaleResolver implements 
 		return resourceBundleMessageSource;
 	}
 	
+	@Bean
+	public CustomReloadableResourceBundleMessageSource customReloadableResourceBundleMessageSource() {
+		CustomReloadableResourceBundleMessageSource customReloadableResourceBundleMessageSource = new CustomReloadableResourceBundleMessageSource();
+		customReloadableResourceBundleMessageSource.setBasenames("classpath*:i18n/messages");
+		customReloadableResourceBundleMessageSource.setDefaultEncoding("UTF-8");
+		return customReloadableResourceBundleMessageSource;
+	}
+	
 }
