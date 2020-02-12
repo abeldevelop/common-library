@@ -7,5 +7,5 @@ public class ErrorCommonCodeMessageConstants {
 	}
 	public static final String I_18_N_MESSAGE_NOT_FOUND = "architecture.i18nMessageNotFound";
 	public static final String VERSION_CONFLICT = "architecture.versionConflict";
-	
+	public static final String REQUEST_FIELD_VALUE_NOT_VALID = "architecture.requestFieldValueNotValid";
 }

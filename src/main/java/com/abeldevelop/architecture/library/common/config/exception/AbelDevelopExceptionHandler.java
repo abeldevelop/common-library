@@ -32,6 +32,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.abeldevelop.architecture.library.common.config.i18n.Translator;
+import com.abeldevelop.architecture.library.common.constant.ErrorCommonCodeMessageConstants;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource;
 import com.abeldevelop.architecture.library.common.dto.exception.ErrorResponseResource.ErrorResponseResourceBuilder;
 import com.abeldevelop.architecture.library.common.enums.Environments;
@@ -107,7 +108,7 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return handleResponseException(new BadRequestException("TODO", Arrays.asList(ex.getValue()), ex), status);
+		return handleResponseException(new BadRequestException(ErrorCommonCodeMessageConstants.REQUEST_FIELD_VALUE_NOT_VALID, Arrays.asList(ex.getValue()), ex), status);
 	}
 
 	@Override
@@ -144,7 +145,7 @@ public class AbelDevelopExceptionHandler extends ResponseEntityExceptionHandler 
 		ErrorResponseResource errorResponseResource = createErrorResponseResource(ex, status);
 		
 		HttpHeaders headers = new HttpHeaders();
-		
+		headers.add("Content-Type", "application/json");
 		if (status.is5xxServerError()) {
 			log.error(ERROR_LOG_PREFIX, errorResponseResource);
 		} else {
